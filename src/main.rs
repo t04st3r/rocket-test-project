@@ -1,5 +1,6 @@
 use std::io;
 
+use rocket::fs::FileServer;
 use rocket::tokio::task::spawn_blocking;
 use rocket::tokio::time::{sleep, Duration};
 
@@ -23,5 +24,7 @@ async fn delay(seconds: u64) -> String {
 
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/", routes![delay, blocking_task])
+    rocket::build()
+        .mount("/", routes![delay, blocking_task])
+        .mount("/public", FileServer::from("static/"))
 }
